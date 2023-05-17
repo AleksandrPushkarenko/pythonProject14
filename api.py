@@ -30,9 +30,12 @@ def get_user_info(user_id):
     age = 2023 - int(res["response"][0]["bdate"].split(".")[2])
     city_id = 1
     sex = res["response"][0]["sex"]
+    name = res["response"][0]["first_name"]
+    surname = res["response"][0]["last_name"]
+    link = f"https://vk.com/id" + str(user_id)
     if sex == 2:
         sex = 1
-    return city_id, age, sex
+    return city_id, age, sex, name, surname, link
 
 
 def search(user_info_tuple: tuple, offset):
@@ -66,16 +69,16 @@ def photos_get(user_id):
                            )
     try:
         photos = photos["items"]
-        user_photo_list = []
+        user_photo_list_to_sort = []
         for _ in range(len(photos)):
             summ = photos[_]["likes"]["count"] + photos[_]["comments"]["count"]
-            user_photo_list.append({"owner_id": photos[_]["owner_id"], "id": photos[_]["id"], "likes": summ})
-        user_photo_list.sort(key=lambda dictionary: dictionary["likes"])
-        user_photo_list.reverse()
+            user_photo_list_to_sort.append({"owner_id": photos[_]["owner_id"], "id": photos[_]["id"], "likes": summ})
+        user_photo_list_to_sort.sort(key=lambda dictionary: dictionary["likes"])
+        user_photo_list_to_sort.reverse()
     except KeyError:
         return
-
-    for num, photo in enumerate(user_photo_list):
+    user_photo_list = []
+    for num, photo in enumerate(user_photo_list_to_sort):
         user_photo_list.append({"owner_id": photo["owner_id"],
                                 "id": photo["id"]
                                 })

@@ -47,5 +47,6 @@ def check_db(viewing_id, viewed_profile):
         answer_viewed = cur.fetchone()
         if answer_viewed is None:
             write_db(viewing_id, viewed_profile)
+            return False
         else:
             return True
