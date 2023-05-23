@@ -12,5 +12,8 @@ for event in longpoll.listen():
             find_user_info = get_user_info(event.user_id)
             output_bot(event, find_user_info, offset)
             offset += 10
+            if offset > 1000:
+                send_msg(event.user_id, "Анкеты закончились")
+                break
         else:
             send_msg(event.user_id, "Неверная команда")
